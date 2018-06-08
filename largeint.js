@@ -96,7 +96,7 @@ LargeInt.prototype.add = function(largeRHS)
 				  let rem = 0;
 				  if(index > 0)
 				  {
-				      rem = resultArr[i-1][0];
+				      rem = resultArr[index-1][0];
 				  }
 				  val[1] += rem;
 				  if (val[1] > 9)
