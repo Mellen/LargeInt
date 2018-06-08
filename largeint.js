@@ -117,8 +117,55 @@ LargeInt.prototype.add = function(largeRHS)
 
 LargeInt.prototype.subtract = function(largeRHS)
 {
-    //todo: finish this
+    if(this.sign === '-' && largeRHS.sign === '-')
+    {
+	let a = new LargeInt(this.number);
+	let b = new LargeInt(largeRHS.number);
+	let c = a.add(b);
+	c.sign = '-';
+	return c;
+    }
+    
     return new LargeInt('0');
+};
+
+LargeInt.prototype.equals = function(largeRHS)
+{
+    return this.sign === largeRHS.sign && this.number === largeRHS.number;
+};
+
+LargeInt.prototype.greaterThan = function(largeRHS)
+{
+    if(this.equals(largeRHS))
+    {
+	return false;
+    }
+
+    if(this.sign === '+' && largeRHS.sign === '-')
+    {
+	return true;
+    }
+
+    if(this.sign === '-' && largeRHS.sign === '+')
+    {
+	return false;
+    }
+
+    if(this.sign === '-')
+    {
+	return this.number < largeRHS.number;
+    }
+
+    return this.number > largeRHS.number;
+};
+
+LargeInt.prototype.lessThan = function(largeRHS)
+{
+    if(this.equals(largeRHS))
+    {
+	return false;
+    }
+    return !this.greaterThan(largeRHS);
 };
 
 // credit to Chris Nielsen (https://stackoverflow.com/a/1308446/204723)
