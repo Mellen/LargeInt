@@ -5,13 +5,14 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	var casted = Number(number);
 	if(Number.isNaN(casted))
 	{
-	    throw "The value in 'number' is not a number.";
+	    throw "The value supplied as an integer is not a number. If you have included thousand separators (e.g. the commas in 1,000,000), remove them and try again.";
 	}
 	else
 	{
 	    number = number.trim();
+	    //todo: currently specifying a different separator to the local one will throw an error,
+	    //so this is a bit convoluted, but I intend to make the parameter actually useful.
 	    this.number = number.split(decimalSeparator)[0];
-	    this.number = this.number.replace(/,/g, '').replace(/\./g,'')
 	}
     }
 
