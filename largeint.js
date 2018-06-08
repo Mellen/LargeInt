@@ -75,9 +75,9 @@ LargeInt.prototype.add = function(largeRHS)
 	lhs.unshift('0');
     }
 
-    let resultArr = lhs.map((ldigit, i) =>
+    let resultArr = lhs.map((ldigit, index) =>
 			    {
-				let rdigit = rhs[i];
+				let rdigit = rhs[index];
 				let val = Number(ldigit) + Number(rdigit)
 				let parts = [];
 				if (val > 9)
