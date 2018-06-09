@@ -179,15 +179,12 @@ LargeInt.prototype.subtract = function(largeRHS)
 
     var result = resultArr.reduce((output, val, index) =>
 				  {
-				      if(val > -1)
-				      {
-					  output.unshift(val);
-				      }
-				      else if(index < resultArr.length - 1)
+				      if(val < 0 && index < resultArr.length - 1)
 				      {
 					  resultArr[index+1]--;
 					  val += 10;
 				      }
+				      output.unshift(val);
 				      return output;
 				  }, []).join('');
 
