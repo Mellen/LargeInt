@@ -41,7 +41,7 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	this.sign = '+';
     }
 
-    while(this.number === '0' && this.number.length > 1)
+    while(this.number[0] === '0' && this.number.length > 1)
     {
 	this.number = this.number.slice(1);
     }
