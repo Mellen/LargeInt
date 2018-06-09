@@ -150,7 +150,7 @@ LargeInt.prototype.subtract = function(largeRHS)
 	c.sign = this.sign;
 	return c;
     }
-    
+
     let swapped = false;
 
     if(this.lessThan(largeRHS))
@@ -163,6 +163,16 @@ LargeInt.prototype.subtract = function(largeRHS)
     {
 	var lhs = this.number.split('');
 	var rhs = largeRHS.number.split('');
+    }
+
+    while(lhs.length > rhs.length)
+    {
+	rhs.unshift('0');
+    }
+
+    while(rhs.length > lhs.length)
+    {
+	lhs.unshift('0');
     }
 
     var resultArr = lhs.map((ldigit, index) => ldigit - rhs[index]).reverse();
