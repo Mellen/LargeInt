@@ -153,7 +153,7 @@ LargeInt.prototype.subtract = function(largeRHS)
 
     let swapped = false;
 
-    if(this.greaterThan(largeRHS))
+    if(this.lessThan(largeRHS))
     {
 	var lhs = largeRHS.number.split('');
 	var rhs = this.number.split('');
@@ -222,7 +222,27 @@ LargeInt.prototype.greaterThan = function(largeRHS)
 
     if(this.sign === '-')
     {
-	return this.number < largeRHS.number;
+	if(this.number.length > largeRHS.number.length)
+	{
+	    return false;
+	}
+	else if(this.number.length < largeRHS.number.length)
+	{
+	    return true;
+	}
+	else
+	{
+	    return this.number < largeRHS.number;
+	}
+    }
+
+    if(this.number.length > largeRHS.number.length)
+    {
+	return true;
+    }
+    else if(this.number.length < largeRHS.number.length)
+    {
+	return false;
     }
 
     return this.number > largeRHS.number;
