@@ -5,7 +5,7 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	var casted = Number(number);
 	if(Number.isNaN(casted))
 	{
-	    throw "The value supplied as an integer is not a number. If you have included thousand separators (e.g. the commas in 1,000,000), remove them and try again.";
+	    throw "The value supplied as an integer ("+number+") is not a number. If you have included thousand separators (e.g. the commas in 1,000,000), remove them and try again.";
 	}
 	else
 	{
