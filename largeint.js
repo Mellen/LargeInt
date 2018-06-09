@@ -40,6 +40,11 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
     {
 	this.sign = '+';
     }
+
+    while(this.number === '0' && this.number.length > 1)
+    {
+	this.number = this.number.slice(1);
+    }
 }
 
 LargeInt.prototype.toString = function()
@@ -49,6 +54,11 @@ LargeInt.prototype.toString = function()
 
 LargeInt.prototype.add = function(largeRHS)
 {
+    if(largeRHS.number === '0')
+    {
+	return new LargeInt(this.sign+this.number);
+    }
+
     if(largeRHS.sign != this.sign)
     {
 	if(this.sign === '-')
@@ -117,16 +127,68 @@ LargeInt.prototype.add = function(largeRHS)
 
 LargeInt.prototype.subtract = function(largeRHS)
 {
-    if(this.sign === '-' && largeRHS.sign === '-')
+    if(this.equals(largeRHS))
     {
-	let a = new LargeInt(this.number);
-	let b = new LargeInt(largeRHS.number);
+	return new LargeInt('0');
+    }
+
+    if(largeRHS.number === '0')
+    {
+	return new LargeInt(this.sign+this.number);
+    }
+
+    if(this.number === '0' && largeRHS.sign === '+')
+    {
+	return new LargeInt('-'+largeRHS.number);
+    }
+
+    if(this.sign != largeRHS.sign)
+    {
+	let a = LargeInt(this.number);
+	let b = LargeInt(largeRHS.number);
 	let c = a.add(b);
-	c.sign = '-';
+	c.sign = this.sign;
 	return c;
     }
     
-    return new LargeInt('0');
+    let swapped = false;
+
+    if(this.lessThan(largeRHS))
+    {
+	var lhs = largeRHS.number.split('');
+	var rhs = this.number.split('');
+	swapped = true;
+    }
+    else
+    {
+	var lhs = this.number.split('');
+	var rhs = largeRHS.number.split('');
+    }
+
+    var resultArr = lhs.map((ldigit, index) => ldigit - rhs[index]).reverse();
+
+    var result = resultArr.reduce((output, val, index) =>
+				  {
+				      if(val > -1)
+				      {
+					  output.unshift(val);
+				      }
+				      else if(index < resultArr.length - 1)
+				      {
+					  resultArr[index+1]--;
+					  val += 10;
+				      }
+				      return output;
+				  }, []).join('');
+
+    while(result[0] === '0' && result.length > 1)
+    {
+	result = result.slice(1);
+    }
+
+    let newSign = swapped ? '-' : '+' ;
+
+    return new LargeInt(newSign+result);
 };
 
 LargeInt.prototype.equals = function(largeRHS)
