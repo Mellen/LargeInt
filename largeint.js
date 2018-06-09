@@ -153,7 +153,7 @@ LargeInt.prototype.subtract = function(largeRHS)
 
     let swapped = false;
 
-    if(this.lessThan(largeRHS))
+    if(this.greaterThan(largeRHS))
     {
 	var lhs = largeRHS.number.split('');
 	var rhs = this.number.split('');
