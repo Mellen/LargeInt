@@ -1,5 +1,7 @@
 export default function LargeInt(number, decimalSeparator=getDecSep())
 {
+    var tempNumber;
+    var sign;
     if(typeof number === 'string')
     {
 	var casted = Number(number);
@@ -12,39 +14,40 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	    number = number.trim();
 	    //todo: currently specifying a different separator to the local one will throw an error,
 	    //so this is a bit convoluted, but I intend to make the parameter actually useful.
-	    this.number = number.split(decimalSeparator)[0];
+	    tempNumber = number.split(decimalSeparator)[0];
 	}
     }
-
-    else if (typeof number === 'number')
+    else if(typeof number === 'number')
     {
-	this.number = Math.floor(number).toString();
+	tempNumber = Math.floor(number).toString();
     }
-
     else
     {
 	throw "The type of the 'number' parameter must be 'string' or 'number'";
     }
 
-    if(this.number[0] == '-')
+    if(tempNumber[0] == '-')
     {
-	this.sign = '-';
-	this.number = this.number.substring(1, this.number.length);
+	sign = '-';
+	tempNumber = tempNumber.slice(1);
     }
-    else if(this.number[0] == '+')
+    else if(tempNumber[0] == '+')
     {
-	this.sign = '+';
+	sign = '+';
 	this.number = this.number.substring(1, this.number.length);
     }
     else
     {
-	this.sign = '+';
+	sign = '+';
     }
 
-    while(this.number[0] === '0' && this.number.length > 1)
+    while(tempNumber[0] === '0' && tempNumber.length > 1)
     {
-	this.number = this.number.slice(1);
+	tempNumber = tempNumber.slice(1);
     }
+
+    Object.defineProperty(LargeInt, 'sign', {'value': sign});
+    Object.defineProperty(LargeInt, 'number', {'value': tempNumber});
 }
 
 LargeInt.prototype.toString = function()
@@ -196,6 +199,28 @@ LargeInt.prototype.subtract = function(largeRHS)
     let newSign = swapped ? '-' : '+' ;
 
     return new LargeInt(newSign+result);
+};
+
+LargeInt.prototype.times = function(largeRHS)
+{
+    if(this.number === '0' || largeRHS.number === '0')
+    {
+	return new LargeInt('0');
+    }
+
+    if(this.equals(new LargeInt('1')))
+    {
+	return new LargeInt(largeRHS.sign+largeRHS.number);
+    }
+
+    if(largeRHS.equals(new LargeInt('1')))
+    {
+	return new LargeInt(this.sign+this.number);
+    }
+
+    let newsign = this.sign === largeRHS.sign ? '+' : '-';
+
+    
 };
 
 LargeInt.prototype.equals = function(largeRHS)
