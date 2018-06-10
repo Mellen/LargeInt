@@ -220,7 +220,14 @@ LargeInt.prototype.times = function(largeRHS)
 
     let newsign = this.sign === largeRHS.sign ? '+' : '-';
 
-    
+    let result = '0';
+
+    return new LargeInt(newsign+result);
+};
+
+LargeInt.prototype.over = function(largeRHS)
+{
+    throw 'This method has not been implemented.';
 };
 
 LargeInt.prototype.equals = function(largeRHS)
