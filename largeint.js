@@ -34,7 +34,7 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
     else if(tempNumber[0] == '+')
     {
 	sign = '+';
-	this.number = this.number.substring(1, this.number.length);
+	tempNumber = tempNumber.slice(1);
     }
     else
     {
