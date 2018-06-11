@@ -46,6 +46,7 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	tempNumber = tempNumber.slice(1);
     }
 
+    //this makes the important information immutable
     Object.defineProperty(this, 'sign', {'value': sign});
     Object.defineProperty(this, 'number', {'value': tempNumber});
 }
@@ -220,9 +221,54 @@ LargeInt.prototype.times = function(largeRHS)
 
     let newsign = this.sign === largeRHS.sign ? '+' : '-';
 
-    let result = '0';
+    let lhs = this.number.split('').map(ldigit => Number(ldigit)).reverse();
+    let rhs = largeRHS.number.split('').map(rdigit => Number(rdigit)).reverse();
 
-    return new LargeInt(newsign+result);
+    let parts = lhs.map((ldigit, index) =>
+			{
+			    let ps = rhs.map(rdigit =>
+					     {
+						 let result = ldigit * rdigit;
+						 return [Math.floor(result/10), result%10];
+					     });
+			    let part = ps.reduce((output, p, index) =>
+					      {
+						  if(index === 0)
+						  {
+						      return [p[1]];
+						  }
+
+						  let val = p[1] + ps[index-1][0];
+
+						  if(val > 9)
+						  {
+						      p[0]++;
+						      val -= 10;
+						  }
+
+						  output.unshift(val);
+
+						  if(index === ps.length-1)
+						  {
+						      let lastval = p[0];
+						      if(lastval > 9)
+						      {
+							  lastval -= 10;
+							  output.unshift(lastval);
+							  output.unshift(1);
+						      }
+						      else
+						      {
+							  output.unshift(lastval);
+						      }
+						  }
+					      }, []).join('');
+			    return new LargeInt(part + '0'.repeat(index));
+			});
+
+    let result = parts.reduce((current, part) => current.add(part), new LargeInt('0'));
+
+    return new LargeInt(newsign+result.number);
 };
 
 LargeInt.prototype.over = function(largeRHS)
