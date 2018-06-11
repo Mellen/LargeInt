@@ -46,8 +46,8 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	tempNumber = tempNumber.slice(1);
     }
 
-    Object.defineProperty(LargeInt, 'sign', {'value': sign});
-    Object.defineProperty(LargeInt, 'number', {'value': tempNumber});
+    Object.defineProperty(this, 'sign', {'value': sign});
+    Object.defineProperty(this, 'number', {'value': tempNumber});
 }
 
 LargeInt.prototype.toString = function()
