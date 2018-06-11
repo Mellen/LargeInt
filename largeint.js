@@ -235,7 +235,14 @@ LargeInt.prototype.times = function(largeRHS)
 					      {
 						  if(index === 0)
 						  {
-						      return [p[1]];
+						      if(index === ps.length-1)
+						      {
+							  return p;
+						      }
+						      else
+						      {
+							  return [p[1]];
+						      }
 						  }
 
 						  let val = p[1] + ps[index-1][0];
