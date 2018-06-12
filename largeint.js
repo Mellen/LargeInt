@@ -41,6 +41,25 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	sign = '+';
     }
 
+    if(tempNumber.indexOf('e') > -1)
+    {
+	let numberPart = tempNumber.split('e')[0];
+	let powerPart = tempNumber.split('e')[1];
+
+	let numberMain = numberPart;
+	let numberSmall = '';
+
+	if(numberPart.indexOf(decimalSeparator) > -1)
+	{
+	    numberMain = numberPart.split('.')[0];
+	    numberSmall = numberPart.split('.')[1];
+	}
+
+	powerPart -= numberSmall.length;
+
+	tempNumber = numberMain+numberSmall+'0'.repeat(powerPart);
+    }
+
     while(tempNumber[0] === '0' && tempNumber.length > 1)
     {
 	tempNumber = tempNumber.slice(1);
