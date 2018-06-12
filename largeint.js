@@ -4,14 +4,18 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
     var sign;
     if(typeof number === 'string')
     {
+	number = number.trim();
 	var casted = Number(number);
 	if(Number.isNaN(casted))
 	{
 	    throw "The value supplied as an integer ("+number+") is not a number. If you have included thousand separators (e.g. the commas in 1,000,000), remove them and try again.";
 	}
+	else if(number.indexOf('e') > -1)
+	{
+	    tempNumber = number;
+	}
 	else
 	{
-	    number = number.trim();
 	    //todo: currently specifying a different separator to the local one will throw an error,
 	    //so this is a bit convoluted, but I intend to make the parameter actually useful.
 	    tempNumber = number.split(decimalSeparator)[0];
@@ -43,8 +47,13 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 
     if(tempNumber.indexOf('e') > -1)
     {
-	let numberPart = tempNumber.split('e')[0];
-	let powerPart = tempNumber.split('e')[1];
+	let expSep = 'e';
+	if(tempNumber.indexOf('e+') > -1)
+	{
+	    expSep = 'e+';
+	}
+	let numberPart = tempNumber.split(expSep)[0];
+	let powerPart = tempNumber.split(expSep)[1];
 
 	let numberMain = numberPart;
 	let numberSmall = '';
