@@ -66,10 +66,13 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 
 	powerPart -= numberSmall.length;
 
-	tempNumber = numberMain+numberSmall+'0'.repeat(powerPart);
 	if(powerPart < 0)
 	{
 	    tempNumber = tempNumber.slice(0, tempNumber.length-powerPart);
+	}
+	else
+	{
+	    tempNumber = numberMain+numberSmall+'0'.repeat(powerPart);
 	}
     }
 
