@@ -269,6 +269,7 @@ LargeInt.prototype.times = function(largeRHS)
 							  output.unshift(lastval);
 						      }
 						  }
+						  return output;
 					      }, []).join('');
 			    return new LargeInt(part + '0'.repeat(index));
 			});
