@@ -151,8 +151,7 @@ LargeInt.prototype.subtract = function(largeRHS)
 	let a = new LargeInt(this.number);
 	let b = new LargeInt(largeRHS.number);
 	let c = a.add(b);
-	c.sign = this.sign;
-	return c;
+	return new LargeInt(this.sign+c.number);
     }
 
     let swapped = false;
