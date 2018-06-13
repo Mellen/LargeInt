@@ -72,7 +72,7 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	    tempNumber = tempNumber.slice(0, tempNumber.length+powerPart);
 	    if(tempNumber === '')
 	    {
-		tempNumber = 0;
+		tempNumber = '0';
 	    }
 	}
 	else
