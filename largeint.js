@@ -8,7 +8,7 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	var casted = Number(number);
 	if(Number.isNaN(casted))
 	{
-	    throw "The value supplied as an integer ("+number+") is not a number. If you have included thousand separators (e.g. the commas in 1,000,000), remove them and try again.";
+	    throw Error('The value supplied as an integer ("+number+") is not a number. If you have included thousand separators (e.g. the commas in 1,000,000), remove them and try again.');
 	}
 	else if(number.indexOf('e') > -1)
 	{
@@ -27,7 +27,7 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
     }
     else
     {
-	throw "The type of the 'number' parameter must be 'string' or 'number'";
+	throw Error('The type of the "number" parameter must be "string" or "number"');
     }
 
     if(tempNumber[0] == '-')
@@ -320,7 +320,20 @@ LargeInt.prototype.times = function(largeRHS)
 
 LargeInt.prototype.over = function(largeRHS)
 {
-    throw 'This method has not been implemented.';
+    if(largeRHS.number === '0')
+    {
+	throw Error('Dividing by zero is not allowed.');
+    }
+
+    if(this.number === '0' || this.lessThan(largeRHS))
+    {
+	return new LargeInt(0);
+    }
+    
+    let lhs = this.number.split('').map(ldigit => Number(ldigit)).reverse();
+    let rhs = largeRHS.number.split('').map(rdigit => Number(rdigit)).reverse();
+
+    throw Error('This method has not been implemented.');
 };
 
 LargeInt.prototype.equals = function(largeRHS)
