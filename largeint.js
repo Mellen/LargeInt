@@ -53,22 +53,23 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	    expSep = 'e+';
 	}
 	let numberPart = tempNumber.split(expSep)[0];
-	let powerPart = tempNumber.split(expSep)[1];
+	let powerPart = Number(tempNumber.split(expSep)[1]);
 
 	let numberMain = numberPart;
 	let numberSmall = '';
 
 	if(numberPart.indexOf(decimalSeparator) > -1)
 	{
-	    numberMain = numberPart.split('.')[0];
-	    numberSmall = numberPart.split('.')[1];
+	    numberMain = numberPart.split(decimalSeparator)[0];
+	    numberSmall = numberPart.split(decimalSeparator)[1];
 	}
 
 	powerPart -= numberSmall.length;
 
 	if(powerPart < 0)
 	{
-	    tempNumber = tempNumber.slice(0, tempNumber.length-powerPart);
+	    tempNumber = numberMain + numberSmall;
+	    tempNumber = tempNumber.slice(0, tempNumber.length+powerPart);
 	}
 	else
 	{
