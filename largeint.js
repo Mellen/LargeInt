@@ -70,6 +70,10 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	{
 	    tempNumber = numberMain + numberSmall;
 	    tempNumber = tempNumber.slice(0, tempNumber.length+powerPart);
+	    if(tempNumber === '')
+	    {
+		tempNumber = 0;
+	    }
 	}
 	else
 	{
