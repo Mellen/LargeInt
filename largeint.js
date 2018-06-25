@@ -8,7 +8,7 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 	var casted = Number(number);
 	if(Number.isNaN(casted))
 	{
-	    throw Error('The value supplied as an integer ("+number+") is not a number. If you have included thousand separators (e.g. the commas in 1,000,000), remove them and try again.');
+	    throw Error('The value supplied as an integer ('+number+') is not a number. If you have included thousand separators (e.g. the commas in 1,000,000), remove them and try again.');
 	}
 	else if(number.indexOf('e') > -1)
 	{
@@ -325,16 +325,38 @@ LargeInt.prototype.over = function(largeRHS)
 	throw Error('Dividing by zero is not allowed.');
     }
 
-    if(this.number === '0' || this.lessThan(largeRHS))
+    if(this.number === '0' || this.abs().lessThan(largeRHS.abs()))
     {
 	return new LargeInt(0);
     }
-    
-    let lhs = this.number.split('').map(ldigit => Number(ldigit)).reverse();
-    let rhs = largeRHS.number.split('').map(rdigit => Number(rdigit)).reverse();
 
-    throw Error('This method has not been implemented.');
+    let newsign = largeRHS.sign === this.sign ? '+' : '-';
+
+    if(largeRHS.number === '1')
+    {
+	return new LargeInt(newsign+this.number);
+    }
+
+    let lhs = this.number.split('').map(ldigit => Number(ldigit));
+    let rhs = largeRHS.number.split('').map(rdigit => Number(rdigit));
+
+    let maxResultLength = lhs.length === rhs.length ? 1 : lhs.length - rhs.length;
+
+    while(lhs.length > rhs.length)
+    {
+	rhs.unshift('0');
+    }
+
+    lsh = lhs.splice(0, maxResultLength+1);
+    rhs = rhs.splice(0, maxResultLength+1);
+
+    throw Error('This method has not been fully implemented.');
 };
+
+LargeInt.prototype.abs = function()
+{
+    return new LargeInt(this.number);
+}
 
 LargeInt.prototype.equals = function(largeRHS)
 {
