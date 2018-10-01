@@ -91,6 +91,8 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
     Object.defineProperty(this, 'number', {'value': tempNumber});
 }
 
+const safeLargeInt = new LargeInt(Number.MAX_SAFE_INTEGER);
+
 LargeInt.prototype.toString = function()
 {
     return this.sign + this.number;
@@ -337,20 +339,64 @@ LargeInt.prototype.over = function(largeRHS)
 	return new LargeInt(newsign+this.number);
     }
 
+    let newsign = this.sign == largeRHS.sign ? '+' : '-';
+
+    if(this.abs().lessThan(safeLargeInt)) //if it's small enough, just do a regular division!
+    {
+	let lhs = Number(this.number);
+	let rhs = Number(largeRHS.number);
+	let val = Math.floor(lhs/rhs);
+	return new LargeInt(newsign + val)
+    }
+
     let lhs = this.number.split('').map(ldigit => Number(ldigit));
     let rhs = largeRHS.number.split('').map(rdigit => Number(rdigit));
 
-    let maxResultLength = lhs.length === rhs.length ? 1 : lhs.length - rhs.length;
+    let maxResultLength = (lhs.length - rhs.length)+1;
 
-    while(lhs.length > rhs.length)
+    let guess = new LargeInt('5'.repeat(maxResultLength));
+
+    let absRHS = largeRHS.abs();
+    let absLHS = this.abs();
+
+    let guess_result = guess.times(absRHS);
+
+    let diff = guess_result.subtract(absLHS);
+
+    while(diff > absRHS)
     {
-	rhs.unshift('0');
+	let first_digit = Math.floor(Number(guess.number[0])/2).toString();
+	if(first_digit === '0')
+	{
+	    guess = new LargeInt(guess.number.substring(1));
+	}
+	else
+	{
+	    guess = new LargeInt(first_digit+guess.number.substring(1));
+	}
+
+	guess_result = guess.times(absRHS);
+
+	diff = guess_result.subtract(absLHS);
     }
 
-    lsh = lhs.splice(0, maxResultLength+1);
-    rhs = rhs.splice(0, maxResultLength+1);
+    if(diff.abs() > absRHS)
+    {
+	throw Error('This method has not been fully implemented.');
+    }
+    else if (diff.abs() === absRHS)
+    {
+	if(diff.greaterThan(new LargeInt(0)))
+	{
+	    guess = guess.subtract(new LargeInt(1));
+	}
+	else
+	{
+	    guess = guess.add(new LargeInt(1));
+	}
+    }
 
-    throw Error('This method has not been fully implemented.');
+    return guess;
 };
 
 LargeInt.prototype.abs = function()
