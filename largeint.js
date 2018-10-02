@@ -92,6 +92,7 @@ export default function LargeInt(number, decimalSeparator=getDecSep())
 }
 
 const safeLargeInt = new LargeInt(Number.MAX_SAFE_INTEGER);
+const zero = new LargeInt(0);
 
 LargeInt.prototype.toString = function()
 {
@@ -354,7 +355,7 @@ LargeInt.prototype.over = function(largeRHS)
 
     let maxResultLength = (lhs.length - rhs.length)+1;
 
-    let guess = new LargeInt('5'.repeat(maxResultLength));
+    let guess = new LargeInt('9'.repeat(maxResultLength));
 
     let absRHS = largeRHS.abs();
     let absLHS = this.abs();
@@ -363,30 +364,43 @@ LargeInt.prototype.over = function(largeRHS)
 
     let diff = guess_result.subtract(absLHS);
 
-    while(diff > absRHS)
+    let curpos = 0;
+
+    let goingup = diff < zero
+
+    while(diff.abs() > absRHS && curpos < guess.number.length)
     {
-	let first_digit = Math.floor(Number(guess.number[0])/2).toString();
-	if(first_digit === '0')
+	let digit = Number(guess.number[curpos])
+	let crement = Math.floor(digit/2);
+	let next_digit = digit-crement;
+	if(goingup)
 	{
-	    guess = new LargeInt(guess.number.substring(1));
+	   next_digit = digit+crement;
 	}
-	else
-	{
-	    guess = new LargeInt(first_digit+guess.number.substring(1));
-	}
+
+	let new_number = guess.number.substring(0, curpos) + next_digit.toString() + guess.number.substring(curpos+1);
+
+	guess = new LargeInt(new_number);
 
 	guess_result = guess.times(absRHS);
 
 	diff = guess_result.subtract(absLHS);
+
+	if(diff < zero && !goingup)
+	{
+	    goingup = true;
+	    curpos++;
+	}
+	else if(diff >= zero && goingup)
+	{
+	    goignup = false;
+	    curpos++;
+	}
     }
 
-    if(diff.abs() > absRHS)
+    if (diff.abs() === absRHS)
     {
-	throw Error('This method has not been fully implemented.');
-    }
-    else if (diff.abs() === absRHS)
-    {
-	if(diff.greaterThan(new LargeInt(0)))
+	if(diff.greaterThan(zero))
 	{
 	    guess = guess.subtract(new LargeInt(1));
 	}
