@@ -378,6 +378,8 @@ LargeInt.prototype.over = function(largeRHS)
 
 	let new_number = guess.number.substring(0, curpos) + next_digit.toString() + guess.number.substring(curpos+1);
 
+	console.log(new_number);
+	
 	guess = new LargeInt(new_number);
 
 	guess_result = guess.times(absRHS);
