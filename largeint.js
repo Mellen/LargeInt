@@ -366,7 +366,7 @@ LargeInt.prototype.over = function(largeRHS)
 
     let goingup = diff < zero
 
-    while(diff.abs() > absRHS && curpos < guess.number.length)
+    while(diff.abs().greaterThan(absRHS) && curpos < guess.number.length)
     {
 	let digit = Number(guess.number[curpos])
 	let crement = Math.floor(digit/2);
@@ -384,19 +384,19 @@ LargeInt.prototype.over = function(largeRHS)
 
 	diff = guess_result.subtract(absLHS);
 
-	if(diff < zero && !goingup)
+	if(diff.lessThan(zero) && !goingup)
 	{
 	    goingup = true;
 	    curpos++;
 	}
-	else if(diff >= zero && goingup)
+	else if(!diff.lessThan(zero) && goingup)
 	{
 	    goignup = false;
 	    curpos++;
 	}
     }
 
-    if (diff.abs() === absRHS)
+    if (diff.abs().equals(absRHS))
     {
 	if(diff.greaterThan(zero))
 	{
