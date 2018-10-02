@@ -393,7 +393,7 @@ LargeInt.prototype.over = function(largeRHS)
 	}
 	else if(!diff.lessThan(zero) && goingup)
 	{
-	    goignup = false;
+	    goingup = false;
 	    curpos++;
 	}
     }
