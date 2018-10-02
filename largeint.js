@@ -340,8 +340,6 @@ LargeInt.prototype.over = function(largeRHS)
 	return new LargeInt(newsign+this.number);
     }
 
-    let newsign = this.sign == largeRHS.sign ? '+' : '-';
-
     if(this.abs().lessThan(safeLargeInt)) //if it's small enough, just do a regular division!
     {
 	let lhs = Number(this.number);
